@@ -1,7 +1,10 @@
 from flask import Blueprint, jsonify
 
-status_bp = Blueprint('status_routes', __name__)
+status_blueprint = Blueprint('status', __name__)
 
-@status_bp.route('/status', methods=['GET'])
-def status():
-    return jsonify({"status": "API is running"})
+
+@status_blueprint.route('/status', methods=['GET'])
+def get_status():
+    """Return a simple status message indicating that the API is running."""
+    return jsonify({'status': 'API is running'})
+

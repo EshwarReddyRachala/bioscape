@@ -1,9 +1,14 @@
 import logging
 
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
+
+FORMATTER = logging.Formatter(
+    fmt="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+HANDLER = logging.StreamHandler()
+HANDLER.setFormatter(FORMATTER)
+
+LOGGER.addHandler(HANDLER)
