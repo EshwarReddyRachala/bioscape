@@ -18,8 +18,8 @@ Ensure you have the following installed on your system:
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/your-repository/ibkr-api.git
-cd ibkr-api
+git clone https://github.com/EshwarReddyRachala/bioscape.git
+cd bioscape
 ```
 
 ### 2. Create a Virtual Environment
@@ -46,6 +46,7 @@ Ensure `pip` is up to date before installing the required dependencies.
 
 ```sh
 pip install --upgrade pip
+pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
 
