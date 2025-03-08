@@ -9,7 +9,18 @@ ib_api = ib_connection.get_ib_api()
 
 @order_bp.route('/place_order', methods=['POST'])
 def handle_order():
-    data = request.json
+    """
+    Place an order using the Interactive Brokers API.
+    
+    """
+    # data = request.json
+
+    data = {
+    "symbol": "AAPL",
+    "action": "BUY",
+    "quantity": 10
+    }
+
     symbol = data.get('symbol')
     action = data.get('action')
     quantity = data.get('quantity')

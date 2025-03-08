@@ -2,35 +2,38 @@ from ibapi.client import EClient
 from ibapi.wrapper import EWrapper
 from ibapi.contract import Contract
 from ibapi.order import Order
-# from ibapi.common import TickType
-from ibapi.ticktype import TickType
 from ibkr_api.logging_setup import logger
 
+# from ibapi.common import TickType
+
 class IBApi(EWrapper, EClient):
+    
     """Interact with the Interactive Brokers API."""
 
     def __init__(self):
-        """Initialize the Interactive Brokers API."""
         EClient.__init__(self, self)
+        self.next_order_id = None  # ✅ Ensure this attribute is initialized
 
-    def next_valid_id(self, order_id: int):
-        """Set the next valid order ID."""
-        super().nextValidId(order_id)
-        self.next_valid_id = order_id
+    def nextValidId(self, orderId: int):
+        """This method is called when the API connects and provides the next valid order ID."""
+        super().nextValidId(orderId)
+        self.next_order_id = orderId  # ✅ Set next_order_id properly
+        print(f"Next valid order ID: {orderId}")
 
-    def error(self, req_id, error_code, error_string):
+    def error(self, reqId, errorCode, errorString):
         """Log an error message."""
-        logger.error(f"Error: {req_id}, {error_code}, {error_string}")
+        logger.error("Error: %s, %s, %s", reqId, errorCode, errorString)
 
-    def order_status(self, order_id, status, filled, remaining, avg_fill_price, perm_id,
-                     parent_id, last_fill_price, client_id, why_held, mkt_cap_price):
+    
+    def order_status(self, order_id, status, filled, remaining):
         """Log an order status message."""
-        logger.info(f"Order Status - ID: {order_id}, Status: {status}, Filled: {filled}, Remaining: {remaining}")
-
+        logger.info("Order Status - ID: %s, Status: %s, Filled: %s, Remaining: %s", 
+                    order_id, status, filled, remaining)
+    
     def exec_details(self, req_id, contract, execution):
         """Log an execution details message."""
-        logger.info(f"Execution Details - ReqID: {req_id}, Symbol: {contract.symbol}, Execution ID: {execution.execId}")
-
+        logger.info("Execution Details - ReqID: %s, Symbol: %s, Execution ID: %s", req_id, contract.symbol, execution.execId)
+        
 def place_order(symbol, action, quantity, ib_api):
     """Place an order using the Interactive Brokers API."""
     contract = Contract()
@@ -45,9 +48,8 @@ def place_order(symbol, action, quantity, ib_api):
     order.total_quantity = quantity
 
     if ib_api.next_valid_id is not None:
-        ib_api.place_order(ib_api.next_valid_id, contract, order)
+        ib_api.placeOrder(ib_api.next_order_id, contract, order)  # ✅ Correct Method Name
         ib_api.next_valid_id += 1
         return {"status": "Order placed", "order_id": ib_api.next_valid_id - 1}
     else:
         return {"error": "Order ID not initialized yet"}
-
