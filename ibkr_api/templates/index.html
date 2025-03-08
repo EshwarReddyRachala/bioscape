@@ -8,37 +8,40 @@
     <meta name="description" content="IBKR API - Interactive Brokers Trading API">
     <meta name="keywords" content="IBKR, API, Trading, Stocks, Python, Flask">
     <title>IBKR API</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <h1>Welcome to the IBKR API</h1>
     <p>This is a Flask-based API for trading with Interactive Brokers.</p>
-    <h2>Available Endpoints</h2>
-    <ul>
-        <li><a href="/api/status">Check API Status</a> - Verify if the API is running.</li>
-        <li><a href="/api/place_order">Place an Order</a> - Submit a trade order.</li>
-        <li><a href="/api/market_data">Get Market Data</a> - Retrieve stock price data.</li>
-        <li><a href="/api/account_info">Account Information</a> - View trading account details.</li>
+    <h2 class="mt-4 text-secondary">Available Endpoints</h2>
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><a href="/api/status" class="text-decoration-none">Check API Status</a> - Verify if
+            the API is running.</li>
+        <li class="list-group-item"><a href="/api/place_order" class="text-decoration-none">Place an Order</a> - Submit
+            a trade order.</li>
+        <li class="list-group-item"><a href="/api/market_data" class="text-decoration-none">Get Market Data</a> -
+            Retrieve stock price data.</li>
+        <li class="list-group-item"><a href="/api/account_info" class="text-decoration-none">Account Information</a> -
+            View trading account details.</li>
     </ul>
 
-    <h2>About the API</h2>
-    <p>This API is built using Python and Flask and integrates with Interactive Brokers' TWS API to provide seamless
-        trading automation. Features include:</p>
-    <ul>
-        <li>Real-time market data access</li>
-        <li>Order placement and execution</li>
-        <li>Portfolio management</li>
-        <li>Historical data retrieval</li>
+    <h2 class="text-secondary">About the API</h2>
+    <p>Built with Python and Flask, the IBKR API integrates seamlessly with Interactive Brokers' TWS API, offering:</p>
+    <ul class="list-group mb-4">
+        <li class="list-group-item">✅ Real-time market data access</li>
+        <li class="list-group-item">✅ Order placement and execution</li>
+        <li class="list-group-item">✅ Portfolio management</li>
+        <li class="list-group-item">✅ Historical data retrieval</li>
     </ul>
 
-    <h2>Getting Started</h2>
-    <p>To start using the API, ensure you have Interactive Brokers' Trader Workstation (TWS) running and API access
-        enabled.</p>
-
-    <h2>Contact</h2>
-    <p>For support or inquiries, reach out at <a href="mailto:support@ibkrapi.com">support@ibkrapi.com</a>.</p>
-
-    <p>&copy; 2025 IBKR API. All rights reserved.</p>
+    <h2 class="text-secondary">Getting Started</h2>
+    <p>Ensure you have Interactive Brokers' Trader Workstation (TWS) running with API access enabled. Follow the
+        documentation for setup instructions.</p>
+    <div class="text-center mb-4">
+        <a href="#" class="btn btn-primary btn-lg">View Documentation</a>
+    </div>
 </body>
 
 </html>
