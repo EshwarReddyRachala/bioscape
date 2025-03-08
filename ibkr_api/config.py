@@ -1,4 +1,10 @@
 class Config:
+    """
+    Configuration class for the application.
+    
+    This class contains constants for the Interactive Brokers API and Flask settings.
+    
+    """
     IB_HOST = "127.0.0.1"
     IB_PORT = 4002
     IB_CLIENT_ID = 1

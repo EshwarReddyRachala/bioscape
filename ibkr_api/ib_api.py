@@ -8,7 +8,14 @@ from ibkr_api.logging_setup import logger
 
 class IBApi(EWrapper, EClient):
     
-    """Interact with the Interactive Brokers API."""
+    """Interact with the Interactive Brokers API.
+    
+    This class inherits from the EWrapper and EClient classes provided by the Interactive Brokers API.
+    It provides methods to interact with the API, such as placing orders and receiving market data.
+    
+    Attributes:
+        next_order_id (int): The next available order ID.
+    """
 
     def __init__(self):
         EClient.__init__(self, self)

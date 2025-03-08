@@ -1,5 +1,9 @@
-from ibkr_api.ib_api import IBApi
+"""
+This module provides a class to establish a connection to the Interactive Brokers API.
+
+"""
 import threading
+from ibkr_api.ib_api import IBApi
 from ibkr_api.config import Config
 
 
@@ -11,6 +15,12 @@ class IBConnection:
 
     """
     def __init__(self):
+        """
+        Initializes the IBConnection class.
+
+        :return: None
+        
+        """
         self._ib_api = IBApi()
 
     def start(self):
