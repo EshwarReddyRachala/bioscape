@@ -11,7 +11,7 @@ class IBConnection:
         self._ib_api.connect(
             host=Config.IB_HOST,
             port=Config.IB_PORT,
-            client_id=Config.IB_CLIENT_ID
+            clientId=Config.IB_CLIENT_ID
         )
         api_thread = threading.Thread(target=self._ib_api.run, daemon=True)
         api_thread.start()

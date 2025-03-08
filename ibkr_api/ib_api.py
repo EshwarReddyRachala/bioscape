@@ -2,7 +2,8 @@ from ibapi.client import EClient
 from ibapi.wrapper import EWrapper
 from ibapi.contract import Contract
 from ibapi.order import Order
-from ibapi.common import TickType
+# from ibapi.common import TickType
+from ibapi.ticktype import TickType
 from ibkr_api.logging_setup import logger
 
 class IBApi(EWrapper, EClient):

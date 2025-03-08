@@ -47,6 +47,7 @@ Ensure `pip` is up to date before installing the required dependencies.
 ```sh
 pip install --upgrade pip
 pip freeze > requirements.txt
+pip uninstall -r requirements.txt -y
 pip install -r requirements.txt
 ```
 
