@@ -3,8 +3,10 @@ This module provides a class to establish a connection to the Interactive Broker
 
 """
 import threading
+import time
 from ibkr_api.ib_api import IBApi
 from ibkr_api.config import Config
+
 
 
 class IBConnection:
@@ -39,6 +41,14 @@ class IBConnection:
         )
         api_thread = threading.Thread(target=self._ib_api.run, daemon=True)
         api_thread.start()
+
+        timeout = 10  # Maximum wait time in seconds
+        start_time = time.time()
+        while self._ib_api.next_order_id is None:
+            if time.time() - start_time > timeout:
+                raise TimeoutError("Timed out waiting for next valid order ID.")
+        print("Waiting for next valid order ID...")
+        time.sleep(1)
 
     def get_ib_api(self):
         """

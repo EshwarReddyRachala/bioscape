@@ -19,7 +19,7 @@ class IBApi(EWrapper, EClient):
 
     def __init__(self):
         EClient.__init__(self, self)
-        self.next_order_id = None  # ✅ Ensure this attribute is initialized
+        self.next_order_id = 0  # ✅ Ensure this attribute is initialized
 
     def nextValidId(self, orderId: int):
         """This method is called when the API connects and provides the next valid order ID."""
@@ -61,9 +61,9 @@ def place_order(symbol, action, quantity, ib_api):
     order.order_type = "MKT"
     order.total_quantity = quantity
 
-    if ib_api.next_valid_id is not None:
+    if ib_api is not None:
         ib_api.placeOrder(ib_api.next_order_id, contract, order)  # ✅ Correct Method Name
-        ib_api.next_valid_id += 1
-        return {"status": "Order placed", "order_id": ib_api.next_valid_id - 1}
+        ib_api.next_order_id += 1
+        return {"status": "Order placed", "order_id": ib_api.next_order_id - 1}
     else:
         return {"error": "Order ID not initialized yet"}
