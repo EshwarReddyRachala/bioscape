@@ -35,7 +35,14 @@ class IBApi(EWrapper, EClient):
         logger.info("Execution Details - ReqID: %s, Symbol: %s, Execution ID: %s", req_id, contract.symbol, execution.execId)
         
 def place_order(symbol, action, quantity, ib_api):
-    """Place an order using the Interactive Brokers API."""
+    """
+    Place an order using the Interactive Brokers API.
+    :param symbol: The stock symbol.
+    :param action: The order action (BUY or SELL).
+    :param quantity: The order quantity.
+    :param ib_api: The Interactive Brokers API instance.
+    :return: A dictionary indicating the status of the order.
+    """
     contract = Contract()
     contract.symbol = symbol
     contract.sec_type = "STK"
