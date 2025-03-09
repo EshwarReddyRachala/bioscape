@@ -106,6 +106,15 @@ POST /place_order
 }
 ```
 
+## Request using Curl 
+
+```sh
+curl.exe -X POST "http://127.0.0.1:5000/api/place_order" `
+         -H "Content-Type: application/json" `
+         -d "{`"symbol`": `"AAPL`", `"action`": `"BUY`", `"quantity`": 100}"
+
+```
+
 ## Managing Dependencies
 
 If you install new packages, update `requirements.txt` using:
