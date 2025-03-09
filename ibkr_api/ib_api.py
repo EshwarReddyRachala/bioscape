@@ -50,6 +50,10 @@ def place_order(symbol, action, quantity, ib_api):
     :param ib_api: The Interactive Brokers API instance.
     :return: A dictionary indicating the status of the order.
     """
+    
+    if ib_api.next_order_id is None:
+        return {"error": "IBKR API is not connected. Please check TWS and API settings."}
+
     contract = Contract()
     contract.symbol = symbol
     contract.sec_type = "STK"
@@ -60,10 +64,11 @@ def place_order(symbol, action, quantity, ib_api):
     order.action = action.upper()
     order.order_type = "MKT"
     order.total_quantity = quantity
-
-    if ib_api is not None:
-        ib_api.placeOrder(ib_api.next_order_id, contract, order)  # ✅ Correct Method Name
-        ib_api.next_order_id += 1
-        return {"status": "Order placed", "order_id": ib_api.next_order_id - 1}
-    else:
-        return {"error": "Order ID not initialized yet"}
+    
+    try:
+        order_id = ib_api.next_order_id
+        ib_api.placeOrder(order_id, contract, order)
+        ib_api.next_order_id += 1  # ✅ Only increment when successful
+        return {"status": "Order placed", "order_id": order_id}
+    except Exception as e:
+        return {"error": f"Failed to place order: {str(e)}"}

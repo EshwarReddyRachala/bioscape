@@ -11,7 +11,7 @@ The function returns the result of the place_order function as a JSON response.
 
 """
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from ibkr_api.ib_connection import ib_connection
 from ibkr_api.ib_api import place_order
 
@@ -26,13 +26,7 @@ def handle_order():
     Place an order using the Interactive Brokers API.
     
     """
-    # data = request.json
-
-    data = {
-    "symbol": "AAPL",
-    "action": "BUY",
-    "quantity": 10
-    }
+    data = request.json
 
     symbol = data.get('symbol')
     action = data.get('action')

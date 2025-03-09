@@ -24,6 +24,10 @@ class IBConnection:
         
         """
         self._ib_api = IBApi()
+        self.connected = False
+        
+    def run_loop(self):
+        self._ib_api.run()
 
     def start(self):
         """
@@ -39,16 +43,19 @@ class IBConnection:
             port=Config.IB_PORT,
             clientId=Config.IB_CLIENT_ID
         )
-        api_thread = threading.Thread(target=self._ib_api.run, daemon=True)
+        api_thread = threading.Thread(target=self.run_loop, daemon=True)
         api_thread.start()
 
-        timeout = 10  # Maximum wait time in seconds
+        timeout = 15  # Maximum wait time in seconds
         start_time = time.time()
         while self._ib_api.next_order_id is None:
             if time.time() - start_time > timeout:
                 raise TimeoutError("Timed out waiting for next valid order ID.")
         print("Waiting for next valid order ID...")
         time.sleep(1)
+        
+        self.connected = True
+        print("✅ Connected to IBKR API!")
 
     def get_ib_api(self):
         """
@@ -56,6 +63,8 @@ class IBConnection:
 
         :return: The IBApi instance."""
 
+        if not self.connected:
+            raise ConnectionError("Not connected to IBKR API. Start connection first.")
         return self._ib_api
 
 
