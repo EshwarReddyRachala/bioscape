@@ -45,6 +45,14 @@ class IBConnection:
         )
         api_thread = threading.Thread(target=self.run_loop, daemon=True)
         api_thread.start()
+        
+        while True:
+            if isinstance(self._ib_api.next_order_id, int):
+                print("Next valid order ID received.")
+                break
+            else:
+                print("Waiting for next valid order ID...")
+                time.sleep(1)
 
         timeout = 15  # Maximum wait time in seconds
         start_time = time.time()

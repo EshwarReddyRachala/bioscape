@@ -6,7 +6,7 @@ class Config:
     
     """
     IB_HOST = "127.0.0.1"
-    IB_PORT = 7498
+    IB_PORT = 7497
     IB_CLIENT_ID = 1
     FLASK_HOST = "0.0.0.0"
     FLASK_PORT = 5000

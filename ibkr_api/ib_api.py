@@ -37,6 +37,10 @@ class IBApi(EWrapper, EClient):
         logger.info("Order Status - ID: %s, Status: %s, Filled: %s, Remaining: %s", 
                     order_id, status, filled, remaining)
     
+    def openOrder(self, orderId, contract, order, orderState):
+        logger.info('openOrder id:', orderId, contract.symbol, contract.secType, '@', contract.exchange, ':', 
+                    order.action, order.orderType, order.totalQuantity, orderState.status)
+    
     def exec_details(self, req_id, contract, execution):
         """Log an execution details message."""
         logger.info("Execution Details - ReqID: %s, Symbol: %s, Execution ID: %s", req_id, contract.symbol, execution.execId)
@@ -65,10 +69,19 @@ def place_order(symbol, action, quantity, ib_api):
     order.order_type = "MKT"
     order.total_quantity = quantity
     
+    marketdata = ib_api.reqMktData(1, contract, '', False, False, [])
+    
+    print(marketdata)
+    
     try:
         order_id = ib_api.next_order_id
+        
         ib_api.placeOrder(order_id, contract, order)
+        
         ib_api.next_order_id += 1  # ✅ Only increment when successful
+        
         return {"status": "Order placed", "order_id": order_id}
+    
     except Exception as e:
+        
         return {"error": f"Failed to place order: {str(e)}"}
