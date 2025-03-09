@@ -34,6 +34,9 @@ def handle_order():
 
     if not symbol or not action or not quantity:
         return jsonify({"error": "Invalid input"}), 400
+    
+    # print(symbol, action, quantity)
 
     result = place_order(symbol, action, quantity, ibapi)
+    
     return jsonify(result)

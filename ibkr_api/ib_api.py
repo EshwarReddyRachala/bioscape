@@ -27,9 +27,11 @@ class IBApi(EWrapper, EClient):
         self.next_order_id = orderId  # ✅ Set next_order_id properly
         print(f"Next valid order ID: {orderId}")
 
-    def error(self, reqId, errorCode, errorString):
-        """Log an error message."""
+    def error(self, reqId, errorCode, errorString, advancedOrderRejectJson=""):
+        print(f"Error: {reqId}, {errorCode}, {errorString}")
         logger.error("Error: %s, %s, %s", reqId, errorCode, errorString)
+        if advancedOrderRejectJson:
+            print(f"Advanced Order Reject Info: {advancedOrderRejectJson}")
 
     
     def order_status(self, order_id, status, filled, remaining):
