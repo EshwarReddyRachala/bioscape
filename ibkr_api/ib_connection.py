@@ -18,29 +18,15 @@ class IBConnection:
 
     """
     def __init__(self):
-        """
-        Initializes the IBConnection class.
-
-        :return: None
-        
-        """
-        self._ib_api = IBApi()  # Create an instance of IBApi
+        self.ib_api = IBApi()
         self.connected = False
         self.next_order_id = None
-        
+
     def run_loop(self):
-        self._ib_api.run()
+        self.ib_api.run()
 
     def start(self):
-        """
-        Starts the API connection.
-
-        This method connects to the Interactive Brokers API using the configured host, port, and client ID.
-        It also starts a new thread to run the API in the background.
-
-        :return: None
-        """
-        self._ib_api.connect(
+        self.ib_api.connect(
             host=Config.IB_HOST,
             port=Config.IB_PORT,
             clientId=Config.IB_CLIENT_ID
@@ -49,67 +35,65 @@ class IBConnection:
         api_thread.start()
         
         while True:
-            if isinstance(self._ib_api.next_order_id, int):
-                
-                print("Next valid order ID received.", self._ib_api.next_order_id)
-                self.next_order_id = self._ib_api.next_order_id
+            if isinstance(self.ib_api.next_order_id, int):
+                self.next_order_id = self.ib_api.next_order_id
                 self.connected = True
-                print("✅ Connected to IBKR API!")
                 break
             else:
-                print("Waiting for next valid order ID...")
                 time.sleep(1)    
                 
                 
-    def ReqMarketData(self,symbol:str):
-        
-        #Create contract object
-        apple_contract = Contract()
-        apple_contract.symbol = 'AAPL'
-        apple_contract.secType = 'STK'
-        apple_contract.exchange = 'SMART'
-        apple_contract.currency = 'USD'
+    def req_market_data(self, symbol: str):
+        """
+        Requests market data for a given symbol.
 
+        :param symbol: The symbol for which market data is requested.
+        :return: The market data.
+        """
+        contract = Contract()
+        contract.symbol = symbol.strip().upper()
+        contract.secType = 'STK'
+        contract.exchange = 'SMART'
+        contract.currency = 'USD'
 
-        result = self._ib_api.reqMktData(1, apple_contract, '', False, False, [])
-        
+        result = self.ib_api.reqMktData(1, contract, '', False, False, [])
         time.sleep(10)
-        
         return result
            
     
-    def place_order(self, symbol, action, quantity):
-        """_summary_
-
-        Args:
-            symbol (_type_): _description_
-            action (_type_): _description_
-            quantity (_type_): _description_
-
-        Returns:
-            _type_: _description_
-            
+    def place_order(self, symbol: str, action: str, quantity: float):
         """
-        
-        #Create Contract object
+        Places an order for a given symbol and quantity.
+
+        :param symbol: The symbol for which the order is placed.
+        :param action: The action of the order (either 'BUY' or 'SELL').
+        :param quantity: The quantity of the order.
+        :return: A dictionary with the status of the order placement.
+        """
+        # Create and configure the Contract object for the given symbol.
         contract = Contract()
-        contract.symbol = 'AAPL'
+        contract.symbol = symbol.strip().upper()
         contract.secType = 'STK'
         contract.exchange = 'SMART'
         contract.currency = 'USD'
         
-        #Create Order object
+        # Create and configure the Order object.
         order = Order()
-        order.action = action.upper()
-        order.totalQuantity = quantity
+        order.action = action.strip().upper()
+        if order.action not in ('BUY', 'SELL'):
+            raise ValueError("Invalid action: must be either 'BUY' or 'SELL'.")
+        
+        order.totalQuantity = float(quantity)
+        if order.totalQuantity <= 0:
+            raise ValueError("Quantity must be a positive number.")
+        
         order.orderType = 'MKT'
          
-        #Place order
+        # Place the order.
         try:
-            self.next_order_id += 1  # Increment for next orde
-            self._ib_api.placeOrder(self.next_order_id, contract, order)
-            return {"status": "Order placed", "order_id": self.next_order_id}
+            self.next_order_id += 1  # Increment for next order
+            self.ib_api.placeOrder(self.next_order_id, contract, order)
+            return {'status': 'Order placed', 'order_id': self.next_order_id}
         
         except Exception as e:
-            print(e)
-            return {"error": f"Failed to place order: {str(e)}"}
+            return {'error': f'Failed to place order: {str(e)}'}
