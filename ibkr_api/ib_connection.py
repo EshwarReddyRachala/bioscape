@@ -22,7 +22,7 @@ class IBConnection:
     def __init__(self):
         self.ib_api = IBApi()
         self.connected = False
-        self.next_order_id = None
+        self.order_id = None
 
     def run_loop(self):
         self.ib_api.run()
@@ -33,14 +33,21 @@ class IBConnection:
         )
         api_thread = threading.Thread(target=self.run_loop, daemon=True)
         api_thread.start()
+
+        while not self.ib_api.isConnected():
+            time.sleep(1)
+        self.connected = True
+
+    def get_order_id(self) -> None:
         
-        # while True:
-        #     if isinstance(self.ib_api._next_order_id, int):
-        #         self.next_order_id = self.ib_api._next_order_id
-        #         self.connected = True
-        #         break
-        #     else:
-        #         time.sleep(1)
+        while True:            
+            if isinstance(self.ib_api.get_next_order_id(), int):
+                print('connected')
+                self.order_id = self.ib_api.get_next_order_id()
+                print(f" Next Valid Order ID: {self.order_id}")
+                break
+            else:
+                print('waiting for connection')
 
     def disconnect(self):
         self.ib_api.disconnect()
@@ -94,13 +101,20 @@ class IBConnection:
 
         # Place the order.
         try:
-            orderID = self.ib_api.get_next_order_id()
-            self.ib_api.placeOrder(orderID, contract, order)
-            return {"status": "Order placed", "order_id": orderID}
+            self.get_order_id()  # get next order id
+            self.ib_api.placeOrder(self.order_id, contract, order)
+            return {"status": "Order placed", "order_id": self.order_id}
 
         except Exception as e:
             return {"error": f"Failed to place order: {str(e)}"}
-
+        
+    
+    def cancel_order(self, order_id: int):
+        try:
+            self.ib_api.cancelOrder(order_id)
+            return {"status": "Order canceled", "order_id": order_id}
+        except Exception as e:
+            return {"error": f"Failed to cancel order: {str(e)}"}
 
 
 ib_connection = IBConnection()
