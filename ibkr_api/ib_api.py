@@ -14,6 +14,14 @@ class IBApi(EWrapper, EClient):
         super().nextValidId(next_order_id)
         self._next_order_id = next_order_id
         logger.info("Next valid order ID: %s", next_order_id)
+        
+    def get_next_order_id(self):
+        """ Returns the next order ID and increments it for future orders. """
+        if self._next_order_id is None:
+            raise ValueError("Next order ID is not set yet. Ensure IB is connected.")
+        order_id = self._next_order_id
+        self._next_order_id += 1  # 🔥 Manually increment order ID
+        return order_id
 
     def error(self, req_id: int, error_code: int, error_string: str, advanced_order_reject_json: str = ""):
         """Log an error message."""

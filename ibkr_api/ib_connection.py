@@ -33,14 +33,14 @@ class IBConnection:
         )
         api_thread = threading.Thread(target=self.run_loop, daemon=True)
         api_thread.start()
-
-        while True:
-            if isinstance(self.ib_api._next_order_id, int):
-                self.next_order_id = self.ib_api._next_order_id
-                self.connected = True
-                break
-            else:
-                time.sleep(1)
+        
+        # while True:
+        #     if isinstance(self.ib_api._next_order_id, int):
+        #         self.next_order_id = self.ib_api._next_order_id
+        #         self.connected = True
+        #         break
+        #     else:
+        #         time.sleep(1)
 
     def disconnect(self):
         self.ib_api.disconnect()
@@ -94,9 +94,13 @@ class IBConnection:
 
         # Place the order.
         try:
-            self.next_order_id += 1  # Increment for next order
-            self.ib_api.placeOrder(self.next_order_id, contract, order)
-            return {"status": "Order placed", "order_id": self.next_order_id}
+            orderID = self.ib_api.get_next_order_id()
+            self.ib_api.placeOrder(orderID, contract, order)
+            return {"status": "Order placed", "order_id": orderID}
 
         except Exception as e:
             return {"error": f"Failed to place order: {str(e)}"}
+
+
+
+ib_connection = IBConnection()

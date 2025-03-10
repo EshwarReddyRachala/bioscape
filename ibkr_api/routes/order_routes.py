@@ -12,7 +12,7 @@ The function returns the result of the place_order function as a JSON response.
 """
 
 from flask import Blueprint, jsonify, request
-from ibkr_api.ib_connection import IBConnection
+from ibkr_api.ib_connection import ib_connection
 
 # from ibkr_api.ib_api import place_order
 
@@ -34,13 +34,11 @@ def handle_order():
 
     if not symbol or not action or not quantity:
         return jsonify({"error": "Invalid input"}), 400
-    
-    ib_connection = IBConnection()
 
     ib_connection.connect()
 
     result = ib_connection.place_order(symbol, action, quantity)
-    
+
     ib_connection.disconnect()
 
     return jsonify(result)
