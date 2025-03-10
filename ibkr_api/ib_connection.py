@@ -6,7 +6,8 @@ import threading
 import time
 from ibkr_api.ib_api import IBApi
 from ibkr_api.config import Config
-
+from ibapi.contract import Contract
+from ibapi.order import Order
 
 
 class IBConnection:
@@ -23,8 +24,9 @@ class IBConnection:
         :return: None
         
         """
-        self._ib_api = IBApi()
+        self._ib_api = IBApi()  # Create an instance of IBApi
         self.connected = False
+        self.next_order_id = None
         
     def run_loop(self):
         self._ib_api.run()
@@ -48,33 +50,30 @@ class IBConnection:
         
         while True:
             if isinstance(self._ib_api.next_order_id, int):
-                print("Next valid order ID received.")
+                
+                print("Next valid order ID received.", self._ib_api.next_order_id)
+                self.next_order_id = self._ib_api.next_order_id
+                self.connected = True
+                print("✅ Connected to IBKR API!")
                 break
             else:
                 print("Waiting for next valid order ID...")
-                time.sleep(1)
-
-        timeout = 15  # Maximum wait time in seconds
-        start_time = time.time()
-        while self._ib_api.next_order_id is None:
-            if time.time() - start_time > timeout:
-                raise TimeoutError("Timed out waiting for next valid order ID.")
-        print("Waiting for next valid order ID...")
-        time.sleep(1)
+                time.sleep(1)    
+                
+                
+    def ReqMarketData(self,symbol:str):
         
-        self.connected = True
-        print("✅ Connected to IBKR API!")
-
-    def get_ib_api(self):
-        """
-        Returns the IBApi instance.
-
-        :return: The IBApi instance."""
-
-        if not self.connected:
-            raise ConnectionError("Not connected to IBKR API. Start connection first.")
-        return self._ib_api
+        #Create contract object
+        apple_contract = Contract()
+        apple_contract.symbol = 'AAPL'
+        apple_contract.secType = 'STK'
+        apple_contract.exchange = 'SMART'
+        apple_contract.currency = 'USD'
 
 
-ib_connection = IBConnection()
-ib_connection.start()
+        result = self._ib_api.reqMktData(1, apple_contract, '', False, False, [])
+        
+        time.sleep(10)
+        
+        return result
+           

@@ -13,16 +13,7 @@
       "id": "programPath",
       "description": "Select the Python file to debug",
       "options": [
-        "run.py",
-        "runiis.py",
-        "ibkr_api/app.py",
-        "ibkr_api/config.py",
-        "ibkr_api/ib_api.py",
-        "ibkr_api/ib_connection.py",
-        "ibkr_api/logging_setup.py",
-        "ibkr_api/routes/home_routes.py",
-        "ibkr_api/routes/order_routes.py",
-        "ibkr_api/routes/status_routes.py"
+        "run.py"
       ]
     }
   ]

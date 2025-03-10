@@ -12,13 +12,13 @@ The function returns the result of the place_order function as a JSON response.
 """
 
 from flask import Blueprint, jsonify, request
-from ibkr_api.ib_connection import ib_connection
-from ibkr_api.ib_api import place_order
+from ibkr_api.ib_connection import IBConnection
+# from ibkr_api.ib_api import place_order
 
 
 
 order_bp = Blueprint('order_routes', __name__)
-ibapi = ib_connection.get_ib_api()
+
 
 @order_bp.route('/place_order', methods=['POST'])
 def handle_order():
@@ -26,7 +26,7 @@ def handle_order():
     Place an order using the Interactive Brokers API.
     
     """
-    data = request.json
+    data = request.get_json()
 
     symbol = data.get('symbol')
     action = data.get('action')
@@ -35,8 +35,15 @@ def handle_order():
     if not symbol or not action or not quantity:
         return jsonify({"error": "Invalid input"}), 400
     
-    # print(symbol, action, quantity)
+    # ib_conn = ib_connection.get_ib_api()
+    
+    ib_connection = IBConnection()
+    ib_connection.start()
 
-    result = place_order(symbol, action, quantity, ibapi)
+    
+    # print(symbol, action, quantity)  
+    result = ib_connection.ReqMarketData(symbol)
+
+    # result = place_order(symbol, action, quantity, ib_connection)
     
     return jsonify(result)
