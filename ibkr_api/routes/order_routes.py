@@ -42,8 +42,8 @@ def handle_order():
 
     
     # print(symbol, action, quantity)  
-    result = ib_connection.ReqMarketData(symbol)
+    # result = ib_connection.ReqMarketData(symbol)
 
-    # result = place_order(symbol, action, quantity, ib_connection)
+    result = ib_connection.place_order(symbol, action, quantity)
     
     return jsonify(result)

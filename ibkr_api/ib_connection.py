@@ -77,3 +77,39 @@ class IBConnection:
         
         return result
            
+    
+    def place_order(self, symbol, action, quantity):
+        """_summary_
+
+        Args:
+            symbol (_type_): _description_
+            action (_type_): _description_
+            quantity (_type_): _description_
+
+        Returns:
+            _type_: _description_
+            
+        """
+        
+        #Create Contract object
+        contract = Contract()
+        contract.symbol = 'AAPL'
+        contract.secType = 'STK'
+        contract.exchange = 'SMART'
+        contract.currency = 'USD'
+        
+        #Create Order object
+        order = Order()
+        order.action = action.upper()
+        order.totalQuantity = quantity
+        order.orderType = 'MKT'
+         
+        #Place order
+        try:
+            self.next_order_id += 1  # Increment for next orde
+            self._ib_api.placeOrder(self.next_order_id, contract, order)
+            return {"status": "Order placed", "order_id": self.next_order_id}
+        
+        except Exception as e:
+            print(e)
+            return {"error": f"Failed to place order: {str(e)}"}
