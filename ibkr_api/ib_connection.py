@@ -35,8 +35,8 @@ class IBConnection:
         api_thread.start()
         
         while True:
-            if isinstance(self.ib_api.next_order_id, int):
-                self.next_order_id = self.ib_api.next_order_id
+            if isinstance(self.ib_api._next_order_id, int):
+                self.next_order_id = self.ib_api._next_order_id
                 self.connected = True
                 break
             else:

@@ -19,8 +19,6 @@ from ibkr_api.ib_connection import IBConnection
 
 order_bp = Blueprint('order_routes', __name__)
 
-ib_connection = IBConnection()
-ib_connection.start()
 
 @order_bp.route('/place_order', methods=['POST'])
 def handle_order():
@@ -36,6 +34,9 @@ def handle_order():
 
     if not symbol or not action or not quantity:
         return jsonify({"error": "Invalid input"}), 400
+    
+    ib_connection = IBConnection()
+    ib_connection.start()
     
     result = ib_connection.place_order(symbol, action, quantity)
     
