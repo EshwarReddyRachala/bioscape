@@ -16,7 +16,7 @@ This script runs the Flask application using the development server.
         
     Author: Firstname Lastname
     Date: 2023-08-30
-    Version: 1.0
+    Version: 1.0 
 """
 
 from ibkr_api.app import create_app
