@@ -35,7 +35,7 @@ def handle_order(symbol=None, action=None, quantity=None):
     return jsonify(result)
 
 
-@order_bp.route("/cancel_order/", methods=["POST"])
+@order_bp.route("order/cancel/", methods=["POST"])
 def cancel_order():
     """
     Cancel an order using the Interactive Brokers API.
@@ -44,6 +44,24 @@ def cancel_order():
     ib_connection.connect()
 
     result = ib_connection.cancel_order()
+
+    ib_connection.disconnect()
+
+    return jsonify(result)
+
+
+@order_bp.route("/order/open_all/", methods=["GET"])
+def get_open_orders():
+    """
+    _summary_
+
+    Returns:
+        _type_: _description_
+        
+    """
+    ib_connection.connect()
+
+    result = ib_connection.get_open_orders()
 
     ib_connection.disconnect()
 

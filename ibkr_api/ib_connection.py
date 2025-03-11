@@ -100,10 +100,15 @@ class IBConnection:
         try:
             if self.last_order_id is None:
                 return {"error": "No order to cancel"}
-            self.ib_api.cancelOrder(self.last_order_id)
+            self.ib_api.cancelOrder(self.last_order_id,"")
             return {"status": "Order canceled", "order_id": self.last_order_id}
         except Exception as e:
             return {"error": f"Failed to cancel order: {str(e)}"}
+        
+    def get_open_orders(self):
+        
+        return self.ib_api.reqCompletedOrders(True)
+    
 
 
 ib_connection = IBConnection()
