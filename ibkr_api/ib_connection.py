@@ -23,6 +23,7 @@ class IBConnection:
         self.ib_api = IBApi()
         self.connected = False
         self.order_id = None
+        self.last_order_id = None
 
     def run_loop(self):
         self.ib_api.run()
@@ -73,12 +74,27 @@ class IBConnection:
 
         # Place the order.
         try:
-            self.order_id = self.ib_api._next_order_id
-            self.ib_api.placeOrder(self.order_id, contract, order)
-            return {"status": "Order placed", "order_id": self.order_id}
+            orderid = self.getOrderID()
+
+            self.ib_api.placeOrder(orderid, contract, order)
+
+            return {"status": "Order placed", "order_id": orderid}
 
         except Exception as e:
             return {"error": f"Failed to place order: {str(e)}"}
+
+    def getOrderID(self):
+        while self.ib_api._next_order_id is None:
+            time.sleep(0.1)
+
+            # Define the local order ID
+        orderid = self.ib_api._next_order_id
+
+        if orderid == self.last_order_id:
+            orderid += 1
+
+        self.last_order_id = orderid
+        return orderid
 
 
 ib_connection = IBConnection()
