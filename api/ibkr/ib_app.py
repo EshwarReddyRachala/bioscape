@@ -8,8 +8,24 @@ from ibapi.order import Order
 
 
 class IBApp(IBClient, IBWrapper):
+    """_summary_
+
+    Args:
+        IBClient (_type_): _description_
+        IBWrapper (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # Intializes our main classes
     def __init__(self, ipaddress, portid, clientid):
+        """_summary_
+
+        Args:
+            ipaddress (_type_): _description_
+            portid (_type_): _description_
+            clientid (_type_): _description_
+        """
         IBWrapper.__init__(self)
         IBClient.__init__(self, wrapper=self)
         self._next_order_id = None
@@ -32,6 +48,11 @@ class IBApp(IBClient, IBWrapper):
         self._next_order_id = orderId
 
     def getOrderID(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         while self._next_order_id is None:
             time.sleep(0.1)
 
@@ -48,6 +69,14 @@ class IBApp(IBClient, IBWrapper):
         return super().disconnect()
 
     def contractCreate(self, symbol: str):
+        """_summary_
+
+        Args:
+            symbol (str): _description_
+
+        Returns:
+            _type_: _description_
+        """
         # Fills out the contract object
         contract1 = Contract()  # Creates a contract object from the import
         contract1.symbol = symbol.strip().upper()  # Sets the ticker symbol
@@ -59,6 +88,16 @@ class IBApp(IBClient, IBWrapper):
         return contract1  # Returns the contract object
 
     def orderCreate(self, action: str, ordertype: str, quantity: int):
+        """_summary_
+
+        Args:
+            action (str): _description_
+            ordertype (str): _description_
+            quantity (int): _description_
+
+        Returns:
+            _type_: _description_
+        """
         # Fills out the order object
         order1 = Order()  # Creates an order object from the import
         order1.action = action.strip().upper()  # Sets the order action to buy
@@ -68,6 +107,25 @@ class IBApp(IBClient, IBWrapper):
         return order1  # Returns the order object
 
     def orderExecution(self, symbol: str, action: str, ordertype: str, quantity: int):
+        """
+        Places an order based on the provided symbol, action, order type, and quantity.
+
+        This method performs the following steps:
+          1. Creates a contract object for the specified symbol.
+          2. Creates an order object using the given action, order type, and quantity.
+          3. Retrieves a unique order ID.
+          4. Places the order by combining the contract and order objects.
+          5. Prints a confirmation message upon successfully placing the order.
+
+        Parameters:
+            symbol (str): The asset symbol for which the order is to be placed.
+            action (str): The order action, such as "BUY" or "SELL".
+            ordertype (str): The type of order (e.g., "MARKET", "LIMIT").
+            quantity (int): The number of shares or contracts to trade.
+
+        Returns:
+            None.
+        """
         # Places the order with the returned contract and order objects
         contractObject = self.contractCreate(symbol)
         orderObject = self.orderCreate(

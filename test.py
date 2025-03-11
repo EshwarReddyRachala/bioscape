@@ -19,3 +19,5 @@ if __name__ == '__main__':
     print("")
     print("This is the current time from the server " )
     print(time)
+    
+    app.orderExecution('AMZN', 'BUY', 'MKT', 100)
