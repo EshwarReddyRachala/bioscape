@@ -12,12 +12,12 @@ if __name__ == '__main__':
     requested_time = app.server_clock()
     
     time = app.currentTime(requested_time)
-    app.BUY('AMZN','BUY','MKT', 100)
     print("order was placed")
+    app.orderExecution('PYPL', 'BUY', 'MKT', 100)
     
     #printing the return from the server
     print("")
     print("This is the current time from the server " )
     print(time)
     
-    app.orderExecution('AMZN', 'BUY', 'MKT', 100)
+    app.disconnect()

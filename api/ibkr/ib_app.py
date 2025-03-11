@@ -17,6 +17,7 @@ class IBApp(IBClient, IBWrapper):
     Returns:
         _type_: _description_
     """
+
     # Intializes our main classes
     def __init__(self, ipaddress, portid, clientid):
         """_summary_
@@ -66,6 +67,15 @@ class IBApp(IBClient, IBWrapper):
         return orderid
 
     def disconnect(self):
+        """
+        _summary_
+
+        Returns:
+            _type_: _description_
+            
+        """
+        print("The program has ended")
+
         return super().disconnect()
 
     def contractCreate(self, symbol: str):
