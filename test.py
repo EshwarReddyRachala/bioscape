@@ -10,15 +10,16 @@ if __name__ == "__main__":
     # assigning the return from our clock method to a variable
     requested_time = app.server_clock()
 
-    time = app.currentTime(requested_time)
+    time1 = app.currentTime(requested_time)
     print("order was placed")
     app.orderExecution("TSLL", "BUY", "MKT", 100)
 
     # printing the return from the server
     print("")
     print("This is the current time from the server ")
-    print(time)
+    print(time1)
     contract = app.contractCreate("PYPL")
     app.reqMktData(1, contract, "", False, False, [])
-    time
+    time.sleep(10)
+    
     app.disconnect()

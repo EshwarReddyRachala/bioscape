@@ -13,7 +13,7 @@ Both functions return the result of their respective API calls as a JSON respons
 """
 
 from flask import Blueprint, jsonify, request
-from api.ib_connection import ib_connection
+from api.ibkr.ib_app import IBApp
 
 order_bp = Blueprint("order_routes", __name__)
 
@@ -26,11 +26,8 @@ def handle_order(symbol=None, action=None, quantity=None):
     if not symbol or not action or not quantity:
         return jsonify({"error": "Invalid input"}), 400
 
-    ib_connection.connect()
-
-    result = ib_connection.place_order(symbol, action, quantity)
-
-    ib_connection.disconnect()
+    order = IBApp()
+    result = order.orderExecution(symbol, action, "MKT", int(quantity))
 
     return jsonify(result)
 
@@ -41,28 +38,24 @@ def cancel_order():
     Cancel an order using the Interactive Brokers API.
     """
 
-    ib_connection.connect()
+    app = IBApp()
 
-    result = ib_connection.cancel_order()
-
-    ib_connection.disconnect()
+    result = app.cancel_last_order()
 
     return jsonify(result)
 
 
-@order_bp.route("/order/open_all/", methods=["GET"])
+@order_bp.route("/order/open/", methods=["GET"])
 def get_open_orders():
     """
     _summary_
 
     Returns:
         _type_: _description_
-        
+
     """
-    ib_connection.connect()
+    app = IBApp()
 
-    result = ib_connection.get_open_orders()
-
-    ib_connection.disconnect()
+    result = app.get_open_orders()
 
     return jsonify(result)

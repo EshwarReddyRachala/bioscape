@@ -147,13 +147,59 @@ class IBApp(IBClient, IBWrapper):
         Returns:
             None.
         """
-        # Places the order with the returned contract and order objects
-        contractObject = self.contractCreate(symbol)
-        orderObject = self.orderCreate(
-            action=action, ordertype=ordertype, quantity=quantity
-        )
-        nextID = self.getOrderID()
-        logger.info(f"Order ID: {nextID}")
-        logger.info("Submitting order")
-        self.placeOrder(nextID, contractObject, orderObject)
-        logger.info("order was placed")
+        try:
+            contractObject = self.contractCreate(symbol)
+            orderObject = self.orderCreate(
+                action=action, ordertype=ordertype, quantity=quantity
+            )
+            nextID = self.getOrderID()
+            logger.info(f"Order ID: {nextID}")
+            logger.info("Submitting order")
+            self.placeOrder(nextID, contractObject, orderObject)
+
+            logger.info(ordertype + " " + action + " order was placed for : " + symbol)
+
+            self.disconnect()
+
+            logger.info("Disconnected from the server")
+
+            return {"status": "Order placed", "order_id": nextID}
+
+        except Exception as e:
+
+            return {"error": f"Failed to place order: {str(e)}"}
+
+    def cancel_order(self, order_id: int):
+        """
+        _summary_
+
+        Args:
+            order_id (int): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        super().cancelOrder(order_id)
+
+        return {"status": "Order canceled", "order_id": order_id}
+
+    def cancel_last_order(self):
+        """
+        _summary_
+
+        Returns:
+            _type_: _description_
+        """
+        self.cancel_order(self.last_order_id)
+
+        return {"status": "Order canceled", "order_id": self.last_order_id}
+    
+    def get_open_orders(self):
+        """
+        _summary_
+
+        Returns:
+            _type_: _description_
+        """
+        
+        return self.reqOpenOrders()
