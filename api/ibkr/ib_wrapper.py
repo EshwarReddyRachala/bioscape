@@ -4,12 +4,13 @@ from threading import Thread
 import queue
 import datetime
 import time
-
+from ..util.logging_setup import logger
 
 class IBWrapper(EWrapper):
 
     ## error handling code
     def init_error(self):
+        logger.info("Initializing error")
         error_queue = queue.Queue()
         self.my_errors_queue = error_queue
 

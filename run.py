@@ -20,7 +20,7 @@ This script runs the Flask application using the development server.
 """
 
 from api.app import create_app
-from api.config import Config
+from api.util.config import Config
 
 application = create_app()
 

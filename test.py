@@ -1,23 +1,24 @@
-from api.config import Config
 from api.ibkr.ib_app import IBApp
+import time
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Create app instance
-    app = IBApp(Config.IB_HOST, Config.IB_PORT, Config.IB_CLIENT_ID)
+    app = IBApp()
     # A printout to show the program began
     print("The program has begun")
 
-        #assigning the return from our clock method to a variable 
+    # assigning the return from our clock method to a variable
     requested_time = app.server_clock()
-    
+
     time = app.currentTime(requested_time)
     print("order was placed")
-    app.orderExecution('PYPL', 'BUY', 'MKT', 100)
-    
-    #printing the return from the server
+    app.orderExecution("TSLL", "BUY", "MKT", 100)
+
+    # printing the return from the server
     print("")
-    print("This is the current time from the server " )
+    print("This is the current time from the server ")
     print(time)
-    
+    contract = app.contractCreate("PYPL")
+    app.reqMktData(1, contract, "", False, False, [])
+    time
     app.disconnect()

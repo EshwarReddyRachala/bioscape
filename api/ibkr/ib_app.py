@@ -5,6 +5,8 @@ from api.ibkr.ib_client import IBClient
 from api.ibkr.ib_wrapper import IBWrapper
 from ibapi.contract import Contract
 from ibapi.order import Order
+from ..util.logging_setup import logger
+from ..util.config import Config
 
 
 class IBApp(IBClient, IBWrapper):
@@ -19,7 +21,7 @@ class IBApp(IBClient, IBWrapper):
     """
 
     # Intializes our main classes
-    def __init__(self, ipaddress, portid, clientid):
+    def __init__(self):
         """_summary_
 
         Args:
@@ -32,13 +34,17 @@ class IBApp(IBClient, IBWrapper):
         self._next_order_id = None
         self.last_order_id = None
 
+        logger.info("Connecting to the server")
+
         # Connects to the server with the ipaddress, portid, and clientId specified in the program execution area
-        self.connect(ipaddress, portid, clientid)
+        self.connect(Config.IB_HOST, Config.IB_PORT, Config.IB_CLIENT_ID)
 
         # Initializes the threading
-        thread = Thread(target=self.run)
+        thread = Thread(target=self.run, daemon=True)
         thread.start()
         setattr(self, "_thread", thread)
+
+        logger.info("Connected to the server")
 
         # Starts listening for errors
         self.init_error()
@@ -64,6 +70,9 @@ class IBApp(IBClient, IBWrapper):
             orderid += 1
 
         self.last_order_id = orderid
+
+        logger.info(f"Order ID: {orderid}")
+
         return orderid
 
     def disconnect(self):
@@ -72,9 +81,9 @@ class IBApp(IBClient, IBWrapper):
 
         Returns:
             _type_: _description_
-            
+
         """
-        print("The program has ended")
+        logger.info("Disconnecting from the server")
 
         return super().disconnect()
 
@@ -95,6 +104,7 @@ class IBApp(IBClient, IBWrapper):
         # In the API side, NASDAQ is always defined as ISLAND in the exchange field
         contract1.exchange = "SMART"
         # contract1.PrimaryExch = "NYSE"
+        logger.info(f"Contract: {contract1}")
         return contract1  # Returns the contract object
 
     def orderCreate(self, action: str, ordertype: str, quantity: int):
@@ -114,6 +124,7 @@ class IBApp(IBClient, IBWrapper):
         order1.orderType = ordertype.strip().upper()  # Sets order type to market buy
         order1.transmit = True
         order1.totalQuantity = quantity  # Setting a static quantity of 10
+        logger.info(f"Order: {order1}")
         return order1  # Returns the order object
 
     def orderExecution(self, symbol: str, action: str, ordertype: str, quantity: int):
@@ -142,5 +153,7 @@ class IBApp(IBClient, IBWrapper):
             action=action, ordertype=ordertype, quantity=quantity
         )
         nextID = self.getOrderID()
+        logger.info(f"Order ID: {nextID}")
+        logger.info("Submitting order")
         self.placeOrder(nextID, contractObject, orderObject)
-        print("order was placed")
+        logger.info("order was placed")

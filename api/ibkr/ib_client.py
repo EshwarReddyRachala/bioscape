@@ -6,12 +6,13 @@ from threading import Thread
 import queue
 import datetime
 import time
-
+from ..util.logging_setup import logger
 
 class IBClient(EClient):
 
     def __init__(self, wrapper):
         ## Set up with a wrapper inside
+        logger.info("IBClient: Initializing")
         EClient.__init__(self, wrapper)
 
     def server_clock(self):
