@@ -44,6 +44,19 @@ class IBConnection:
         self.connected = False
         self.next_order_id = None
 
+    def getOrderID(self):
+        while self.ib_api._next_order_id is None:
+            time.sleep(0.1)
+
+            # Define the local order ID
+        orderid = self.ib_api._next_order_id
+
+        if orderid == self.last_order_id:
+            orderid += 1
+
+        self.last_order_id = orderid
+        return orderid
+
     def place_order(self, symbol: str, action: str, quantity: float):
         """
         Places an order for a given symbol and quantity.
@@ -82,19 +95,6 @@ class IBConnection:
 
         except Exception as e:
             return {"error": f"Failed to place order: {str(e)}"}
-
-    def getOrderID(self):
-        while self.ib_api._next_order_id is None:
-            time.sleep(0.1)
-
-            # Define the local order ID
-        orderid = self.ib_api._next_order_id
-
-        if orderid == self.last_order_id:
-            orderid += 1
-
-        self.last_order_id = orderid
-        return orderid
 
 
 ib_connection = IBConnection()
