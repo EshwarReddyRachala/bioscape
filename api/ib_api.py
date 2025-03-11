@@ -1,6 +1,6 @@
 from ibapi.client import EClient
 from ibapi.wrapper import EWrapper
-from ibkr_api.logging_setup import logger
+from api.logging_setup import logger
 
 
 class IBApi(EWrapper, EClient):

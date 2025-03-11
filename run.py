@@ -19,8 +19,8 @@ This script runs the Flask application using the development server.
     Version: 1.0 
 """
 
-from ibkr_api.app import create_app
-from ibkr_api.config import Config
+from api.app import create_app
+from api.config import Config
 
 application = create_app()
 

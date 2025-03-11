@@ -4,7 +4,7 @@ import os
 # Add project directory to path
 sys.path.insert(0, os.path.dirname(__file__))
 
-from ibkr_api.app import create_app
+from api.app import create_app
 
 # Create app instance
 app = create_app()

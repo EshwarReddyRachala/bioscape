@@ -5,8 +5,8 @@ This module provides a class to establish a connection to the Interactive Broker
 
 import threading
 import time
-from ibkr_api.ib_api import IBApi
-from ibkr_api.config import Config
+from api.ib_api import IBApi
+from api.config import Config
 from ibapi.contract import Contract
 from ibapi.order import Order
 

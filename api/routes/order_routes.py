@@ -13,7 +13,7 @@ Both functions return the result of their respective API calls as a JSON respons
 """
 
 from flask import Blueprint, jsonify, request
-from ibkr_api.ib_connection import ib_connection
+from api.ib_connection import ib_connection
 
 order_bp = Blueprint("order_routes", __name__)
 

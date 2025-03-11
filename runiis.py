@@ -1,4 +1,4 @@
-from ibkr_api.app import create_app
+from api.app import create_app
 from waitress import serve
 
 app = create_app()
