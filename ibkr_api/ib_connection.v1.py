@@ -38,10 +38,38 @@ class IBConnection:
             time.sleep(1)
         self.connected = True
 
+    def get_order_id(self) -> None:
+        
+        while True:            
+            if isinstance(self.ib_api.get_next_order_id(), int):
+                print('connected')
+                self.order_id = self.ib_api.get_next_order_id()
+                print(f" Next Valid Order ID: {self.order_id}")
+                break
+            else:
+                print('waiting for connection')
+
     def disconnect(self):
         self.ib_api.disconnect()
         self.connected = False
         self.next_order_id = None
+
+    def req_market_data(self, symbol: str):
+        """
+        Requests market data for a given symbol.
+
+        :param symbol: The symbol for which market data is requested.
+        :return: The market data.
+        """
+        contract = Contract()
+        contract.symbol = symbol.strip().upper()
+        contract.secType = "STK"
+        contract.exchange = "SMART"
+        contract.currency = "USD"
+
+        result = self.ib_api.reqMktData(1, contract, "", False, False, [])
+        time.sleep(10)
+        return result
 
     def place_order(self, symbol: str, action: str, quantity: float):
         """
@@ -73,12 +101,20 @@ class IBConnection:
 
         # Place the order.
         try:
-            self.order_id = self.ib_api._next_order_id
+            self.get_order_id()  # get next order id
             self.ib_api.placeOrder(self.order_id, contract, order)
             return {"status": "Order placed", "order_id": self.order_id}
 
         except Exception as e:
             return {"error": f"Failed to place order: {str(e)}"}
+        
+    
+    def cancel_order(self, order_id: int):
+        try:
+            self.ib_api.cancelOrder(order_id)
+            return {"status": "Order canceled", "order_id": order_id}
+        except Exception as e:
+            return {"error": f"Failed to cancel order: {str(e)}"}
 
 
 ib_connection = IBConnection()

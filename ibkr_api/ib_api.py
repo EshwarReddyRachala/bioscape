@@ -9,11 +9,11 @@ class IBApi(EWrapper, EClient):
         EClient.__init__(self, self)
         self._next_order_id = None
 
-    def nextValidId(self, next_order_id: int):
+    def nextValidId(self, orderId: int):
         """This method is called when the API connects and provides the next valid order ID."""
-        super().nextValidId(next_order_id)
-        self._next_order_id = next_order_id
-        logger.info("Next valid order ID: %s", next_order_id)
+        super().nextValidId(orderId)
+        self._next_order_id = orderId
+        logger.info("Next valid order ID: %s", orderId)
         
     def get_next_order_id(self):
         """ Returns the next order ID and increments it for future orders. """
