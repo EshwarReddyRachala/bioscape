@@ -96,5 +96,14 @@ class IBConnection:
         except Exception as e:
             return {"error": f"Failed to place order: {str(e)}"}
 
+    def cancel_order(self):
+        try:
+            if self.last_order_id is None:
+                return {"error": "No order to cancel"}
+            self.ib_api.cancelOrder(self.last_order_id)
+            return {"status": "Order canceled", "order_id": self.last_order_id}
+        except Exception as e:
+            return {"error": f"Failed to cancel order: {str(e)}"}
+
 
 ib_connection = IBConnection()

@@ -35,17 +35,15 @@ def handle_order(symbol=None, action=None, quantity=None):
     return jsonify(result)
 
 
-@order_bp.route("/cancel_order/<orderid>", methods=["POST"])
-def cancel_order(orderid=None):
+@order_bp.route("/cancel_order/", methods=["POST"])
+def cancel_order():
     """
     Cancel an order using the Interactive Brokers API.
     """
-    if not orderid:
-        return jsonify({"error": "Order ID is required"}), 400
 
     ib_connection.connect()
 
-    result = ib_connection.cancel_order(orderid)
+    result = ib_connection.cancel_order()
 
     ib_connection.disconnect()
 
