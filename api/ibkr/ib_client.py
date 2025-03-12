@@ -1,21 +1,24 @@
-from ibapi.wrapper import *
-from ibapi.client import *
-from ibapi.contract import *
-from ibapi.order import *
 from threading import Thread
 import queue
 import datetime
 import time
+from ibapi.wrapper import *
+from ibapi.client import *
+from ibapi.contract import *
+from ibapi.order import *
 from ..util.logging_setup import logger
 
 class IBClient(EClient):
+    """_Initializes the client_"""
 
     def __init__(self, wrapper):
+        """_Initializes the client_"""
         ## Set up with a wrapper inside
         logger.info("IBClient: Initializing")
         EClient.__init__(self, wrapper)
 
     def server_clock(self):
+        """_Requests the unix time from the server_"""
 
         print("Asking server for Unix time")
 
@@ -36,6 +39,6 @@ class IBClient(EClient):
 
         while self.wrapper.is_error():
             print("Error:")
-            print(self.get_error(timeout=5))
+            # print(self.get_error(timeout=5))
 
         return requested_time

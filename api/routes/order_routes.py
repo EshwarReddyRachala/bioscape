@@ -12,14 +12,14 @@ and calls the cancel_order function from the ibkr_api.ib_api module to cancel th
 Both functions return the result of their respective API calls as a JSON response.
 """
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from api.ibkr.ib_app import IBApp
 
 order_bp = Blueprint("order_routes", __name__)
 
 
-@order_bp.route("/order/<symbol>/<action>/<quantity>", methods=["POST"])
-def handle_order(symbol=None, action=None, quantity=None):
+@order_bp.route("/api/order/<symbol>/<action>/<type>/<quantity>", methods=["POST"])
+def handle_order(symbol=None, action=None,ordertype=None, quantity=None):
     """
     Place an order using the Interactive Brokers API.
     """
@@ -27,12 +27,12 @@ def handle_order(symbol=None, action=None, quantity=None):
         return jsonify({"error": "Invalid input"}), 400
 
     order = IBApp()
-    result = order.orderExecution(symbol, action, "MKT", int(quantity))
+    result = order.order_execution(symbol, action, ordertype, int(quantity))
 
     return jsonify(result)
 
 
-@order_bp.route("order/cancel/", methods=["POST"])
+@order_bp.route("/api/order/cancel/", methods=["POST"])
 def cancel_order():
     """
     Cancel an order using the Interactive Brokers API.
@@ -45,7 +45,7 @@ def cancel_order():
     return jsonify(result)
 
 
-@order_bp.route("/order/open/", methods=["GET"])
+@order_bp.route("/api/order/open/", methods=["GET"])
 def get_open_orders():
     """
     _summary_

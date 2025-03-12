@@ -54,7 +54,7 @@ class IBApp(IBClient, IBWrapper):
         super().nextValidId(orderId)
         self._next_order_id = orderId
 
-    def getOrderID(self):
+    def getorder_id(self):
         """_summary_
 
         Returns:
@@ -71,7 +71,7 @@ class IBApp(IBClient, IBWrapper):
 
         self.last_order_id = orderid
 
-        logger.info(f"Order ID: {orderid}")
+        logger.info("Order ID: %s", orderid)
 
         return orderid
 
@@ -87,7 +87,7 @@ class IBApp(IBClient, IBWrapper):
 
         return super().disconnect()
 
-    def contractCreate(self, symbol: str):
+    def contract(self, symbol: str):
         """_summary_
 
         Args:
@@ -104,10 +104,11 @@ class IBApp(IBClient, IBWrapper):
         # In the API side, NASDAQ is always defined as ISLAND in the exchange field
         contract1.exchange = "SMART"
         # contract1.PrimaryExch = "NYSE"
-        logger.info(f"Contract: {contract1}")
+        logger.info("Contract: %s", contract1)
+
         return contract1  # Returns the contract object
 
-    def orderCreate(self, action: str, ordertype: str, quantity: int):
+    def order(self, action: str, ordertype: str, quantity: int):
         """_summary_
 
         Args:
@@ -123,11 +124,13 @@ class IBApp(IBClient, IBWrapper):
         order1.action = action.strip().upper()  # Sets the order action to buy
         order1.orderType = ordertype.strip().upper()  # Sets order type to market buy
         order1.transmit = True
+        order1.eTradeOnly = False 
+        order1.firmQuoteOnly = False
         order1.totalQuantity = quantity  # Setting a static quantity of 10
-        logger.info(f"Order: {order1}")
+        logger.info("Order ID: %s", order1)
         return order1  # Returns the order object
 
-    def orderExecution(self, symbol: str, action: str, ordertype: str, quantity: int):
+    def order_execution(self, symbol: str, action: str, ordertype: str, quantity: int):
         """
         Places an order based on the provided symbol, action, order type, and quantity.
 
@@ -148,22 +151,23 @@ class IBApp(IBClient, IBWrapper):
             None.
         """
         try:
-            contractObject = self.contractCreate(symbol)
-            orderObject = self.orderCreate(
+            contract_obj = self.contract(symbol)
+            order_obj = self.order(
                 action=action, ordertype=ordertype, quantity=quantity
             )
-            nextID = self.getOrderID()
-            logger.info(f"Order ID: {nextID}")
+            next_id = self.getorder_id()
+            logger.info("Order ID: %s", next_id)
             logger.info("Submitting order")
-            self.placeOrder(nextID, contractObject, orderObject)
+            self.placeOrder(next_id, contract_obj, order_obj)
 
-            logger.info(ordertype + " " + action + " order was placed for : " + symbol)
+            logger.info(ordertype + " " + action +
+                        " order was placed for : " + symbol)
 
             self.disconnect()
 
             logger.info("Disconnected from the server")
 
-            return {"status": "Order placed", "order_id": nextID}
+            return {"status": "Order placed", "order_id": next_id}
 
         except Exception as e:
 
@@ -193,7 +197,7 @@ class IBApp(IBClient, IBWrapper):
         self.cancel_order(self.last_order_id)
 
         return {"status": "Order canceled", "order_id": self.last_order_id}
-    
+
     def get_open_orders(self):
         """
         _summary_
@@ -201,5 +205,5 @@ class IBApp(IBClient, IBWrapper):
         Returns:
             _type_: _description_
         """
-        
+
         return self.reqOpenOrders()
