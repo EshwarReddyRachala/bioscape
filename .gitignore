@@ -1,0 +1,24 @@
+    # Virtual environment directories
+venv/
+.venv/
+env/
+venv/*
+
+# Compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE configuration files
+.idea/
+*.swp
+
+# Operating system files
+.DS_Store
+
+# Environment configuration files
+.env
+
+# Log files
+*.log
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Your Name">
+    <meta name="description" content="IBKR API - Interactive Brokers Trading API">
+    <meta name="keywords" content="IBKR, API, Trading, Stocks, Python, Flask">
+    <title>IBKR API</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the IBKR API</h1>
+        <p>This is a Flask-based API for trading with Interactive Brokers.</p>
+
+        <h2 class="mt-4 text-secondary">Available Endpoints</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item">
+                <a href="/api/status" class="text-decoration-none">Check API Status</a> - Verify if the API is running.
+            </li>
+            <li class="list-group-item">
+                <a href="/api/orders/open" class="text-decoration-none">Open Orders</a> - Verify if the API is running.
+            </li>
+            <li class="list-group-item">
+                <a href="/api/place_order" class="text-decoration-none">Place an Order</a> - Submit a trade order.
+            </li>
+            <li class="list-group-item">
+                <a href="/api/cancel_order" class="text-decoration-none">Cancel an Order</a> - Submit a trade order.
+            </li>
+            <li class="list-group-item">
+                <a href="/api/market_data" class="text-decoration-none">Get Market Data</a> - Retrieve stock price data.
+            </li>
+            <li class="list-group-item">
+                <a href="/api/account_info" class="text-decoration-none">Account Information</a> - View trading account details.
+            </li>
+        </ul>
+
+        <h2 class="text-secondary">About the API</h2>
+        <p>
+            Built with Python and Flask, the IBKR API integrates seamlessly with Interactive Brokers' TWS API, offering:
+        </p>
+        <ul class="list-group mb-4">
+            <li class="list-group-item">✅ Real-time market data access</li>
+            <li class="list-group-item">✅ Order placement and execution</li>
+            <li class="list-group-item">✅ Portfolio management</li>
+            <li class="list-group-item">✅ Historical data retrieval</li>
+        </ul>
+    </div>
+</body>
+</html>
